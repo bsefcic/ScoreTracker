@@ -5,6 +5,8 @@ import { observer } from "mobx-react-lite"
 import { Button, Header, Screen, Text, GradientBackground } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
+import { useStores } from "../../models"
+import { TxKeyPath } from "../../i18n"
 
 const FULL: ViewStyle = { flex: 1 }
 const CONTAINER: ViewStyle = {
@@ -51,27 +53,43 @@ const MENU_BUTTON: ViewStyle = {
   paddingVertical: spacing[4],
   paddingHorizontal: spacing[4],
   backgroundColor: color.palette.deepPurple,
+  marginBottom: spacing[4],
+}
+
+const getName = (gameName: string): TxKeyPath => {
+  switch (gameName) {
+    case "presidents":
+      return "menu.presidents"
+    default:
+      return "errors.invalidGameName"
+  }
 }
 
 export const MenuScreen: FC<StackScreenProps<NavigatorParamList, "menu">> = observer(
   ({ navigation }) => {
-    const nextScreen = () => navigation.navigate("demo")
+    const { gameStore, ongoingGameStore } = useStores()
+    const { games } = gameStore
 
     return (
-      <View testID="WelcomeScreen" style={FULL}>
+      <View testID="MenuScreen" style={FULL}>
         <GradientBackground colors={["#422443", "#281b34"]} />
         <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
           <Header headerTx="welcomeScreen.poweredBy" style={HEADER} titleStyle={HEADER_TITLE} />
           <Text style={TITLE_WRAPPER}>
             <Text style={TITLE} text="Choose the game you want to play!" />
           </Text>
-          <Button
-            testID="presidents-button"
-            style={MENU_BUTTON}
-            textStyle={MENU_TEXT}
-            tx="menu.presidents"
-            onPress={nextScreen}
-          />
+          {games.map((game) => (
+            <Button
+              testID={`${game.name}-button`}
+              style={MENU_BUTTON}
+              textStyle={MENU_TEXT}
+              tx={getName(game.name)}
+              onPress={() => {
+                ongoingGameStore.setGameName(game.name)
+                navigation.navigate("demo")
+              }}
+            />
+          ))}
         </Screen>
       </View>
     )

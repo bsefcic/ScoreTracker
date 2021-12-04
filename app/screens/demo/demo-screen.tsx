@@ -15,6 +15,7 @@ import { NavigatorParamList } from "../../navigators"
 import { color, spacing } from "../../theme"
 import { Api } from "../../services/api"
 import { save } from "../../utils/storage"
+import { useStores } from "../../models"
 export const logoIgnite = require("./logo-ignite.png")
 export const heart = require("./heart.png")
 
@@ -96,7 +97,6 @@ const platformCommand = Platform.select({
 export const DemoScreen: FC<StackScreenProps<NavigatorParamList, "demo">> = observer(
   ({ navigation }) => {
     const goBack = () => navigation.goBack()
-
     const demoReactotron = React.useMemo(
       () => async () => {
         console.tron.log("Your Friendly tron log message")

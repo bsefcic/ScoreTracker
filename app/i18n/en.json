@@ -5,7 +5,8 @@
     "back": "Back"
   },
   "errors": {
-    "invalidEmail": "Invalid email address."
+    "invalidEmail": "Invalid email address.",
+    "invalidGameName": "Invalid game name."
   },
   "welcomeScreen": {
     "poweredBy": "POWERED BY IGNITE",
