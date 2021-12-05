@@ -6,7 +6,7 @@ import { Button, Header, Screen, Text, GradientBackground } from "../../componen
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
 import { useStores } from "../../models"
-import { TxKeyPath } from "../../i18n"
+
 
 const FULL: ViewStyle = { flex: 1 }
 const CONTAINER: ViewStyle = {
@@ -56,39 +56,55 @@ const MENU_BUTTON: ViewStyle = {
   marginBottom: spacing[4],
 }
 
-const getName = (gameName: string): TxKeyPath => {
-  switch (gameName) {
-    case "presidents":
-      return "menu.presidents"
-    default:
-      return "errors.invalidGameName"
-  }
-}
-
-export const MenuScreen: FC<StackScreenProps<NavigatorParamList, "menu">> = observer(
+export const NumberOfPlayersScreen: FC<StackScreenProps<NavigatorParamList, "numberOfPlayers">> = observer(
   ({ navigation }) => {
     const { gameStore, ongoingGameStore } = useStores()
     const { games } = gameStore
-
+    let minNumberOfPlayers = 0;
+    let maxNumberOfPlayers = 0;
+    games.forEach(game => {
+      console.log(game.name)
+      if (game.name == ongoingGameStore.name)
+       { minNumberOfPlayers = game.minNumberOfPlayers;
+          maxNumberOfPlayers = game.maxNumberOfPlayers;  
+      }
+    })
+    // Nu am reusit sa afisez butoanele, am incercat cu functie si direct.
+    const myButtons = () => {Array.from(
+      { length: maxNumberOfPlayers - minNumberOfPlayers + 1 },
+      (_, i) => Number(i) + Number(minNumberOfPlayers)).map((index) => (
+        <Button
+              style={MENU_BUTTON}
+              textStyle={MENU_TEXT}
+              text="Dragos"
+              onPress={() => {
+                navigation.navigate("menu")
+              }}
+            />
+      ))
+    }
     return (
-      <View testID="MenuScreen" style={FULL}>
+      <View testID="NumberOfPlayersScreen" style={FULL}>
         <GradientBackground colors={["#422443", "#281b34"]} />
         <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
           <Header headerTx="welcomeScreen.poweredBy" style={HEADER} titleStyle={HEADER_TITLE} />
           <Text style={TITLE_WRAPPER}>
-            <Text style={TITLE} text="Choose the game you want to play!" />
+            <Text style={TITLE} text="Choose the number of players!"/>
           </Text>
-          {games.map((game) => (
-             <Button
-              testID={`${game.name}-button`}
-              style={MENU_BUTTON}
-              textStyle={MENU_TEXT}
-              tx={getName(game.name)}
-              onPress={() => {
-                navigation.navigate("numberOfPlayers")
-              }}
-            />
-          ))}
+          {/*nici asa nu apar*/}
+          {[3,4,5,6,7,8].map((i,index) =>{
+            console.log(i);
+            console.log(index);
+            <Button
+            key={index}
+            style={MENU_BUTTON}
+            textStyle={MENU_TEXT}
+            text='${value}'
+            
+          />
+          })}
+            
+        
         </Screen>
       </View>
     )

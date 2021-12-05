@@ -8,7 +8,7 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { DemoScreen, DemoListScreen, MenuScreen } from "../screens"
+import { DemoScreen, DemoListScreen, MenuScreen, NumberOfPlayersScreen } from "../screens"
 import { navigationRef } from "./navigation-utilities"
 
 /**
@@ -25,6 +25,7 @@ import { navigationRef } from "./navigation-utilities"
  */
 export type NavigatorParamList = {
   menu: undefined
+  numberOfPlayers: undefined
   demo: undefined
   demoList: undefined
 }
@@ -41,6 +42,7 @@ const AppStack = () => {
       initialRouteName="menu"
     >
       <Stack.Screen name="menu" component={MenuScreen} />
+      <Stack.Screen name="numberOfPlayers" component={NumberOfPlayersScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
       <Stack.Screen name="demoList" component={DemoListScreen} />
     </Stack.Navigator>
