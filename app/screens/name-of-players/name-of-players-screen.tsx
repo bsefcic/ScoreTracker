@@ -2,7 +2,7 @@ import React, { FC } from "react"
 import { View, ViewStyle, TextStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
-import { Button, Header, Screen, Text, GradientBackground } from "../../components"
+import { Button, Header, Screen, Text, GradientBackground, TextField } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
 import { useStores } from "../../models"
@@ -55,22 +55,28 @@ const MENU_BUTTON: ViewStyle = {
   marginBottom: spacing[4],
 }
 
-export const NumberOfPlayersScreen: FC<
-  StackScreenProps<NavigatorParamList, "numberOfPlayers">
+const INPUT_STYLE: TextStyle = {
+  color: "white",
+  backgroundColor: color.palette.deepPurple,
+}
+
+export const NameOfPlayersScreen: FC<
+  StackScreenProps<NavigatorParamList, "nameOfPlayers">
 > = observer(({ navigation }) => {
+  const { ongoingGameStore, playerStore } = useStores()
+
   const goBack = () => navigation.goBack()
-  const { gameStore, ongoingGameStore } = useStores()
-  const { games } = gameStore
 
-  const game = games.find((game) => game.name === ongoingGameStore.name)
-
-  const numberOptions = Array.from(
-    { length: game.maxNumberOfPlayers - game.minNumberOfPlayers + 1 },
-    (_, i) => Number(i) + Number(game.minNumberOfPlayers),
-  )
+  const handleInput = (event) => {
+    playerStore.addPlayer({
+      id: Number(event.target.id),
+      name: event.target.value,
+      score: 0,
+    })
+  }
 
   return (
-    <View testID="NumberOfPlayersScreen" style={FULL}>
+    <View testID="NameOfPlayersScreen" style={FULL}>
       <GradientBackground colors={["#422443", "#281b34"]} />
       <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
         <Header
@@ -81,20 +87,25 @@ export const NumberOfPlayersScreen: FC<
           onLeftPress={goBack}
         />
         <Text style={TITLE_WRAPPER}>
-          <Text style={TITLE} text="Choose the number of players!" />
+          <Text style={TITLE} text="Choose the name of players!" />
         </Text>
-        {numberOptions.map((index) => (
-          <Button
+        {Array.from({ length: ongoingGameStore.numberOfPlayers }, (_, i) => i + 1).map((index) => (
+          <TextField
             key={index}
-            style={MENU_BUTTON}
-            textStyle={MENU_TEXT}
-            text={index.toString()}
-            onPress={() => {
-              ongoingGameStore.setNumberOfPlayers(index)
-              navigation.navigate("nameOfPlayers")
-            }}
+            nativeID={index.toString()}
+            placeholder={`Enter player ${index} name`}
+            inputStyle={INPUT_STYLE}
+            onBlur={handleInput}
           />
         ))}
+        <Button
+          style={MENU_BUTTON}
+          textStyle={MENU_TEXT}
+          text={"PLAY"}
+          onPress={() => {
+            navigation.navigate("demoList")
+          }}
+        />
       </Screen>
     </View>
   )

@@ -80,11 +80,13 @@ export const MenuScreen: FC<StackScreenProps<NavigatorParamList, "menu">> = obse
           </Text>
           {games.map((game) => (
              <Button
+              key={`${game.name}-button`}
               testID={`${game.name}-button`}
               style={MENU_BUTTON}
               textStyle={MENU_TEXT}
               tx={getName(game.name)}
               onPress={() => {
+                ongoingGameStore.setGameName(game.name);
                 navigation.navigate("numberOfPlayers")
               }}
             />
