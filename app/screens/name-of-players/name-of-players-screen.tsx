@@ -64,6 +64,7 @@ export const NameOfPlayersScreen: FC<
   StackScreenProps<NavigatorParamList, "nameOfPlayers">
 > = observer(({ navigation }) => {
   const { ongoingGameStore, playerStore } = useStores()
+  const { name } = ongoingGameStore;
 
   const goBack = () => navigation.goBack()
 
@@ -74,7 +75,12 @@ export const NameOfPlayersScreen: FC<
       score: 0,
     })
   }
-
+  const getScreenName = (name:string): keyof NavigatorParamList => {
+switch (name){
+  case "presidents": return "presidents"
+  default: return undefined
+}
+  }
   return (
     <View testID="NameOfPlayersScreen" style={FULL}>
       <GradientBackground colors={["#422443", "#281b34"]} />
@@ -103,7 +109,7 @@ export const NameOfPlayersScreen: FC<
           textStyle={MENU_TEXT}
           text={"PLAY"}
           onPress={() => {
-            navigation.navigate("demoList")
+            navigation.navigate(getScreenName(ongoingGameStore.name))
           }}
         />
       </Screen>
