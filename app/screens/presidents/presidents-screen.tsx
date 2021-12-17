@@ -58,9 +58,14 @@ const MENU_BUTTON: ViewStyle = {
 
 export const PresidentsScreen: FC<StackScreenProps<NavigatorParamList, "presidents">> = observer(
   ({ navigation }) => {
-    const { gameStore, ongoingGameStore } = useStores()
+    const { playerStore, gameStore, ongoingGameStore } = useStores()
     const { games } = gameStore
+    const { players } = playerStore
+    let scorDeDat = ongoingGameStore.numberOfPlayers
     const goBack = () => navigation.goBack()
+
+    let buttonList = {}
+    players.forEach((player) => (buttonList[player.id] = true))
 
     return (
       <View testID="presidents" style={FULL}>
@@ -73,9 +78,48 @@ export const PresidentsScreen: FC<StackScreenProps<NavigatorParamList, "presiden
             leftIcon="back"
             onLeftPress={goBack}
           />{" "}
-          <Text style={TITLE_WRAPPER}>
-            <Text style={TITLE} text="Muie Garbur" />
-          </Text>
+          <div>
+            {ongoingGameStore.roundOngoing ? (
+              players.map((player) => (
+                <Button
+                  key={player.id}
+                  style={MENU_BUTTON}
+                  textStyle={MENU_TEXT}
+                  text={player.name + player.id}
+                  onPress={() => {
+                    console.log(ongoingGameStore.roundOngoing)
+                    buttonList[player.id] = false
+                    player.addScore(scorDeDat)
+                    scorDeDat -= 1
+                    if (scorDeDat === 0) {
+                      scorDeDat = ongoingGameStore.numberOfPlayers
+                      ongoingGameStore.setRoundOngoing(false)
+                    }
+                    console.log(buttonList)
+                    console.log(player + " are scorul" + player.score)
+                  }}
+                />
+              ))
+            ) : (
+              <div>
+                <Button
+                  style={MENU_BUTTON}
+                  textStyle={MENU_TEXT}
+                  onPress={() => ongoingGameStore.setRoundOngoing(true)}
+                  text="Start Round"
+                />
+                <Button
+                  style={MENU_BUTTON}
+                  textStyle={MENU_TEXT}
+                  onPress={() => {
+                    //de implementat
+                    console.log("Sa scoata scoru")
+                  }}
+                  text="Show score"
+                />
+              </div>
+            )}
+          </div>
         </Screen>
       </View>
     )

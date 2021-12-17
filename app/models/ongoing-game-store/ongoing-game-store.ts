@@ -6,6 +6,7 @@ export const OngoingGameModel = types
   .props({
     name: types.optional(types.string, ""),
     numberOfPlayers: types.optional(types.number, 0),
+    roundOngoing: types.optional(types.boolean, false),
   })
   .extend(withEnvironment)
   .actions((self) => ({
@@ -15,4 +16,7 @@ export const OngoingGameModel = types
     setNumberOfPlayers: (numberOfPlayers: number) => {
       self.numberOfPlayers = numberOfPlayers
     },
+    setRoundOngoing: (roundOngoing: boolean) => {
+      self.roundOngoing = roundOngoing
+    }
   }))
