@@ -56,16 +56,16 @@ const MENU_BUTTON: ViewStyle = {
   marginBottom: spacing[4],
 }
 
+let scorDeDat = 0
+
 export const PresidentsScreen: FC<StackScreenProps<NavigatorParamList, "presidents">> = observer(
   ({ navigation }) => {
     const { playerStore, gameStore, ongoingGameStore } = useStores()
-    const { games } = gameStore
     const { players } = playerStore
-    let scorDeDat = ongoingGameStore.numberOfPlayers
+    if (scorDeDat === 0) {
+      scorDeDat = ongoingGameStore.numberOfPlayers
+    }
     const goBack = () => navigation.goBack()
-
-    let buttonList = {}
-    players.forEach((player) => (buttonList[player.id] = true))
 
     return (
       <View testID="presidents" style={FULL}>
@@ -77,35 +77,41 @@ export const PresidentsScreen: FC<StackScreenProps<NavigatorParamList, "presiden
             titleStyle={HEADER_TITLE}
             leftIcon="back"
             onLeftPress={goBack}
-          />{" "}
+          />
           <div>
             {ongoingGameStore.roundOngoing ? (
               players.map((player) => (
-                <Button
-                  key={player.id}
-                  style={MENU_BUTTON}
-                  textStyle={MENU_TEXT}
-                  text={player.name + player.id}
-                  onPress={() => {
-                    console.log(ongoingGameStore.roundOngoing)
-                    buttonList[player.id] = false
-                    player.addScore(scorDeDat)
-                    scorDeDat -= 1
-                    if (scorDeDat === 0) {
-                      scorDeDat = ongoingGameStore.numberOfPlayers
-                      ongoingGameStore.setRoundOngoing(false)
-                    }
-                    console.log(buttonList)
-                    console.log(player + " are scorul" + player.score)
-                  }}
-                />
-              ))
-            ) : (
+                  <Button
+                    key={player.id}
+                    style={MENU_BUTTON}
+                    textStyle={MENU_TEXT}
+                    text={player.name + player.id}
+                    disabled = {player.attended}
+                    onPress={() => {
+                      player.addScore(scorDeDat)
+                      scorDeDat -= 1
+                      if (scorDeDat === 0) {
+                        scorDeDat = ongoingGameStore.numberOfPlayers
+                        ongoingGameStore.setRoundOngoing(false)
+                      }
+                      console.log(player + " are scorul: " + player.score)
+                      player.setAttended(true)
+                    }}
+                  />
+
+                )
+              )) : (
               <div>
                 <Button
                   style={MENU_BUTTON}
                   textStyle={MENU_TEXT}
-                  onPress={() => ongoingGameStore.setRoundOngoing(true)}
+                  onPress={() => (
+                    players.map((player) => (
+                      player.setAttended(false)
+                    )),
+                    ongoingGameStore.setRoundOngoing(true)
+                  )
+                  }
                   text="Start Round"
                 />
                 <Button

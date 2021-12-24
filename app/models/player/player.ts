@@ -7,11 +7,15 @@ export const PlayerModel = types
     id: types.identifierNumber,
     name: types.maybe(types.string),
     score: types.maybe(types.number),
+    attended: types.maybe(types.boolean, false),
   })
   .extend(withEnvironment)
   .actions((self) => ({
     addScore: (score: number) => {
       self.score += score
+    },
+    setAttended: (attended: boolean) => {
+      self.attended = attended
     },
   }))
 
