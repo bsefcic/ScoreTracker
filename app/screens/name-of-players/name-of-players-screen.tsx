@@ -73,6 +73,7 @@ export const NameOfPlayersScreen: FC<
       id: Number(event.target.id),
       name: event.target.value,
       score: 0,
+      attended:false
     })
   }
   const getScreenName = (name:string): keyof NavigatorParamList => {

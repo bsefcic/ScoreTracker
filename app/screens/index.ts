@@ -6,4 +6,5 @@ export * from "./menu/menu-screen"
 export * from "./number-of-players/number-of-players-screen"
 export * from "./name-of-players/name-of-players-screen"
 export * from "./presidents/presidents-screen"
+export * from "./score-table/score-table-screen"
 // export other screens here

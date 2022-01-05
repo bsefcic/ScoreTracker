@@ -106,10 +106,11 @@ export const PresidentsScreen: FC<StackScreenProps<NavigatorParamList, "presiden
                   style={MENU_BUTTON}
                   textStyle={MENU_TEXT}
                   onPress={() => (
-                    players.map((player) => (
-                      player.setAttended(false)
-                    )),
-                    ongoingGameStore.setRoundOngoing(true)
+                    // players.map((player) => ( 
+                    //   player.setAttended(false)
+                    // )),
+                    // ongoingGameStore.setRoundOngoing(true)
+                    navigation.navigate("demoList")
                   )
                   }
                   text="Start Round"
@@ -119,7 +120,7 @@ export const PresidentsScreen: FC<StackScreenProps<NavigatorParamList, "presiden
                   textStyle={MENU_TEXT}
                   onPress={() => {
                     //de implementat
-                    console.log("Sa scoata scoru")
+                    navigation.navigate("scoreTable");
                   }}
                   text="Show score"
                 />
