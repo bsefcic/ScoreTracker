@@ -6,7 +6,6 @@ import { Button, Header, Screen, Text, GradientBackground } from "../../componen
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
 import { useStores } from "../../models"
-import { PlayerSnapshot } from "../../models/player/player"
 
 const FULL: ViewStyle = { flex: 1 }
 const CONTAINER: ViewStyle = {
@@ -59,35 +58,15 @@ const MENU_BUTTON: ViewStyle = {
 
 export const ScorePickerScreen: FC<StackScreenProps<NavigatorParamList, "scorePicker">> = observer(
   ({ navigation }) => {
-    const { playerStore, OngoingGame } = useStores()
-    const { players } = playerStore
+    const { ongoingGameStore, roundStore } = useStores()
+    const { roundPlayers } = roundStore
 
-    const goBack = () => navigation.goBack()
-
-    let scoreAmount = OngoingGame.numberOfPlayers
-
-    let numberOfClicks = 1
-    playerStore.getPlayers().map((player) => {
-      return {
-        playerId: player.id,
-        playerName: player.name,
-        playerScore: player.score,
-        clicked: false,
-      }
-    })
-    const button : HTMLInputElement
-
-    const saveScores = () => {
-      playerStore.savePlayers(
-        buttonProps.map((buttonProp) => {
-          return {
-            id: buttonProp.playerId,
-            name: buttonProp.playerName,
-            score: buttonProp.playerScore,
-          }
-        }),
-      )
+    const goBack = () => {
+      navigation.goBack()
+      roundStore.emptyPlayers()
     }
+
+    let scoreAmount = ongoingGameStore.numberOfPlayers
 
     return (
       <View testID="scorePicker" style={FULL}>
@@ -101,22 +80,24 @@ export const ScorePickerScreen: FC<StackScreenProps<NavigatorParamList, "scorePi
             onLeftPress={goBack}
           />
           <div>
-            {buttonProps.map((buttonProp) => {
+            {roundPlayers.map((roundPlayer) => {
               return (
                 <Button
-                  key={buttonProp.playerId}
+                  key={roundPlayer.id}
                   style={MENU_BUTTON}
                   textStyle={MENU_TEXT}
-                  text={buttonProp.playerName}
-                  disabled={buttonProp.clicked}
+                  text={roundPlayer.name}
+                  disabled={roundPlayer.scoreWon !== Number.EPSILON}
                   onPress={() => {
-                    buttonProp.playerScore += scoreAmount
+                    roundStore.setScoreWonToPlayer(roundPlayer.id, scoreAmount)
+                    if (scoreAmount === ongoingGameStore.numberOfPlayers)
+                      roundStore.setWinner(roundPlayer)
+                    if (scoreAmount === 1) roundStore.setLoser(roundPlayer)
                     scoreAmount--
-                    if (numberOfClicks === players.length) {
-                      saveScores()
+                    if (roundStore.allPLayersPicked()) {
+                      roundStore.emptyPlayers()
                       navigation.goBack()
                     }
-                    numberOfClicks++
                   }}
                 />
               )

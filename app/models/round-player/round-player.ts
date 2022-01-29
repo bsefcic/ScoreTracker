@@ -6,7 +6,7 @@ export const RoundPlayerModel = types
     id: types.maybe(types.identifierNumber),
     name: types.maybe(types.string),
     scoreWon: types.optional(types.number, Number.EPSILON),
-    rank: types.maybe(types.number)
+    roundRank: types.maybe(types.number)
   })
 
 type RoundPlayerType = Instance<typeof RoundPlayerModel>

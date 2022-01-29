@@ -1,8 +1,9 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { CharacterStoreModel } from "../character-store/character-store"
 import { GameStoreModel } from "../game-store/game-store"
-import { OngoingGameModel } from "../ongoing-game/ongoing-game"
+import { OngoingGameStoreModel } from "../ongoing-game-store/ongoing-game-store"
 import { PlayerStoreModel } from "../player-store/player-store"
+import { RoundStoreModel } from "../round-store/round-store"
 
 /**
  * A RootStore model.
@@ -12,7 +13,8 @@ export const RootStoreModel = types.model("RootStore").props({
   characterStore: types.optional(CharacterStoreModel, {} as any),
   playerStore: types.optional(PlayerStoreModel, {} as any),
   gameStore: types.optional(GameStoreModel, {} as any),
-  OngoingGame: types.optional(OngoingGameModel, {} as any)
+  ongoingGameStore: types.optional(OngoingGameStoreModel, {} as any),
+  roundStore: types.optional(RoundStoreModel, {} as any)
 })
 
 /**

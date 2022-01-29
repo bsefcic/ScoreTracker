@@ -67,7 +67,7 @@ const getName = (gameName: string): TxKeyPath => {
 
 export const MenuScreen: FC<StackScreenProps<NavigatorParamList, "menu">> = observer(
   ({ navigation }) => {
-    const { gameStore, OngoingGame } = useStores()
+    const { gameStore, ongoingGameStore } = useStores()
     const { games } = gameStore
 
     return (
@@ -86,7 +86,7 @@ export const MenuScreen: FC<StackScreenProps<NavigatorParamList, "menu">> = obse
               textStyle={MENU_TEXT}
               tx={getName(game.name)}
               onPress={() => {
-                OngoingGame.setGameName(game.name)
+                ongoingGameStore.setGameName(game.name)
                 navigation.navigate("numberOfPlayers")
               }}
             />

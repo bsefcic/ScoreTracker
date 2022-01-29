@@ -1,6 +1,6 @@
 import { types } from "mobx-state-tree"
 import { withEnvironment } from ".."
-import { RoundModel } from "../round/round"
+import { RoundStoreModel } from "../round-store/round-store"
 
 export const OngoingGameStoreModel = types
   .model("OngoingGameStore")
@@ -8,7 +8,7 @@ export const OngoingGameStoreModel = types
     name: types.optional(types.string, ""),
     numberOfPlayers: types.optional(types.number, 0),
     roundOngoing: types.optional(types.boolean, false),
-    rounds: types.optional(types.array(RoundModel), [])
+    rounds: types.optional(types.array(RoundStoreModel), [])
   })
   .extend(withEnvironment)
   .actions((self) => ({

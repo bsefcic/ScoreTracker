@@ -57,7 +57,7 @@ const MENU_BUTTON: ViewStyle = {
 
 export const PresidentsScreen: FC<StackScreenProps<NavigatorParamList, "presidents">> = observer(
   ({ navigation }) => {
-    const { playerStore } = useStores()
+    const { playerStore, roundStore } = useStores()
 
     const goBack = () => {
       navigation.goBack()
@@ -79,7 +79,10 @@ export const PresidentsScreen: FC<StackScreenProps<NavigatorParamList, "presiden
             <Button
               style={MENU_BUTTON}
               textStyle={MENU_TEXT}
-              onPress={() => navigation.navigate("scorePicker")}
+              onPress={() => {
+                roundStore.setGamePlayers(playerStore.getPlayers())
+                navigation.navigate("scorePicker")
+              }}
               text="End round"
             />
             <Button

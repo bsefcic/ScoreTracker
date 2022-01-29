@@ -63,7 +63,7 @@ const INPUT_STYLE: TextStyle = {
 export const NameOfPlayersScreen: FC<
   StackScreenProps<NavigatorParamList, "nameOfPlayers">
 > = observer(({ navigation }) => {
-  const { OngoingGame, playerStore } = useStores()
+  const { ongoingGameStore, playerStore } = useStores()
   const { players } = playerStore
 
   const goBack = () => navigation.goBack()
@@ -101,7 +101,7 @@ export const NameOfPlayersScreen: FC<
         <Text style={TITLE_WRAPPER}>
           <Text style={TITLE} text="Choose the name of players!" />
         </Text>
-        {Array.from({ length: OngoingGame.numberOfPlayers }, (_, i) => i + 1).map((index) => (
+        {Array.from({ length: ongoingGameStore.numberOfPlayers }, (_, i) => i + 1).map((index) => (
           <TextField
             key={index}
             nativeID={index.toString()}
@@ -115,7 +115,7 @@ export const NameOfPlayersScreen: FC<
           textStyle={MENU_TEXT}
           text={"PLAY"}
           onPress={() => {
-            const difference = OngoingGame.numberOfPlayers - players.length
+            const difference = ongoingGameStore.numberOfPlayers - players.length
             for (let i = 0; i < difference; i++) {
               const id = playerStore.getNextIndex()
               playerStore.addPlayer({
@@ -124,7 +124,7 @@ export const NameOfPlayersScreen: FC<
                 score: 0,
               })
             }
-            navigation.navigate(getScreenName(OngoingGame.name))
+            navigation.navigate(getScreenName(ongoingGameStore.name))
           }}
         />
       </Screen>
