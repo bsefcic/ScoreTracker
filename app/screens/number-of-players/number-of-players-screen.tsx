@@ -59,10 +59,10 @@ export const NumberOfPlayersScreen: FC<
   StackScreenProps<NavigatorParamList, "numberOfPlayers">
 > = observer(({ navigation }) => {
   const goBack = () => navigation.goBack()
-  const { gameStore, ongoingGameStore } = useStores()
+  const { gameStore, OngoingGame } = useStores()
   const { games } = gameStore
 
-  const game = games.find((game) => game.name === ongoingGameStore.name)
+  const game = games.find((game) => game.name === OngoingGame.name)
 
   const numberOptions = Array.from(
     { length: game.maxNumberOfPlayers - game.minNumberOfPlayers + 1 },
@@ -90,7 +90,7 @@ export const NumberOfPlayersScreen: FC<
             textStyle={MENU_TEXT}
             text={index.toString()}
             onPress={() => {
-              ongoingGameStore.setNumberOfPlayers(index)
+              OngoingGame.setNumberOfPlayers(index)
               navigation.navigate("nameOfPlayers")
             }}
           />

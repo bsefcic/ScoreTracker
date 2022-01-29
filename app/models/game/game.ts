@@ -1,9 +1,9 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree";
+import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
 export const GameModel = types.model("Game").props({
-    name: types.string,
-    minNumberOfPlayers: types.optional(types.number, 0),
-    maxNumberOfPlayers: types.optional(types.number, 0)
+  name: types.string,
+  minNumberOfPlayers: types.optional(types.number, 0),
+  maxNumberOfPlayers: types.optional(types.number, 0),
 })
 
 type GameType = Instance<typeof GameModel>

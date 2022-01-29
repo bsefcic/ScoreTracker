@@ -63,24 +63,29 @@ const INPUT_STYLE: TextStyle = {
 export const NameOfPlayersScreen: FC<
   StackScreenProps<NavigatorParamList, "nameOfPlayers">
 > = observer(({ navigation }) => {
-  const { ongoingGameStore, playerStore } = useStores()
-  const { name } = ongoingGameStore;
+  const { OngoingGame, playerStore } = useStores()
+  const { players } = playerStore
 
   const goBack = () => navigation.goBack()
 
   const handleInput = (event) => {
-    playerStore.addPlayer({
-      id: Number(event.target.id),
-      name: event.target.value,
-      score: 0,
-      attended:false
-    })
+    if (event.target.value !== "") {
+      const id = Number(playerStore.getNextIndex())
+      playerStore.addPlayer({
+        id: id,
+        name: event.target.value,
+        score: 0,
+      })
+    }
   }
-  const getScreenName = (name:string): keyof NavigatorParamList => {
-switch (name){
-  case "presidents": return "presidents"
-  default: return undefined
-}
+
+  const getScreenName = (name: string): keyof NavigatorParamList => {
+    switch (name) {
+      case "presidents":
+        return "presidents"
+      default:
+        return undefined
+    }
   }
   return (
     <View testID="NameOfPlayersScreen" style={FULL}>
@@ -96,7 +101,7 @@ switch (name){
         <Text style={TITLE_WRAPPER}>
           <Text style={TITLE} text="Choose the name of players!" />
         </Text>
-        {Array.from({ length: ongoingGameStore.numberOfPlayers }, (_, i) => i + 1).map((index) => (
+        {Array.from({ length: OngoingGame.numberOfPlayers }, (_, i) => i + 1).map((index) => (
           <TextField
             key={index}
             nativeID={index.toString()}
@@ -110,7 +115,16 @@ switch (name){
           textStyle={MENU_TEXT}
           text={"PLAY"}
           onPress={() => {
-            navigation.navigate(getScreenName(ongoingGameStore.name))
+            const difference = OngoingGame.numberOfPlayers - players.length
+            for (let i = 0; i < difference; i++) {
+              const id = playerStore.getNextIndex()
+              playerStore.addPlayer({
+                id: Number(id),
+                name: `Player ${id}`,
+                score: 0,
+              })
+            }
+            navigation.navigate(getScreenName(OngoingGame.name))
           }}
         />
       </Screen>

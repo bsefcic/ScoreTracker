@@ -62,22 +62,22 @@ const INPUT_STYLE: TextStyle = {
 }
 
 const FLAT_LIST: ViewStyle = {
-    paddingHorizontal: spacing[4],
+  paddingHorizontal: spacing[4],
 }
 
 const LIST_TEXT: TextStyle = {
-    marginLeft: 10,
-  }
+  marginLeft: 10,
+}
 
-  const LIST_CONTAINER: ViewStyle = {
-    alignItems: "center",
-    flexDirection: "row",
-    padding: 10,
-  }
+const LIST_CONTAINER: ViewStyle = {
+  alignItems: "center",
+  flexDirection: "row",
+  padding: 10,
+}
 
 export const ScoreTableScreen: FC<StackScreenProps<NavigatorParamList, "scoreTable">> = observer(
   ({ navigation }) => {
-    const { ongoingGameStore, playerStore } = useStores()
+    const { OngoingGame, playerStore } = useStores()
     const { players } = playerStore
 
     const goBack = () => navigation.goBack()
@@ -87,7 +87,6 @@ export const ScoreTableScreen: FC<StackScreenProps<NavigatorParamList, "scoreTab
         id: Number(event.target.id),
         name: event.target.value,
         score: 0,
-        attended: false,
       })
     }
     const getScreenName = (name: string): keyof NavigatorParamList => {
@@ -117,7 +116,7 @@ export const ScoreTableScreen: FC<StackScreenProps<NavigatorParamList, "scoreTab
               {player.name} {player.score}
             </Text>
           ))} */}
-        <FlatList
+          <FlatList
             contentContainerStyle={FLAT_LIST}
             data={[...players]}
             keyExtractor={(item) => String(item.id)}

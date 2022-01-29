@@ -16,5 +16,16 @@ export const PlayerStoreModel = types
       const playerToReplace = self.players.find((player) => player.id === playerSnapshot.id)
       if (playerToReplace) self.players.remove(playerToReplace)
       self.players.push(playerSnapshot)
+      console.log("Adding player " + playerSnapshot)
+    },
+    deleteAllPlayers: () => {
+      self.players.splice(0, self.players.length)
+    },
+    getNextIndex: () => {
+      if (self.players.length === 0) return 1
+      return self.players[self.players.length - 1].id + 1
+    },
+    getPlayers: () => {
+      return self.players
     },
   }))

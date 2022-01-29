@@ -6,6 +6,7 @@ import { Button, Header, Screen, Text, GradientBackground } from "../../componen
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
 import { useStores } from "../../models"
+import { PlayerSnapshot } from "../../models/player/player"
 
 const FULL: ViewStyle = { flex: 1 }
 const CONTAINER: ViewStyle = {
@@ -53,19 +54,43 @@ const MENU_BUTTON: ViewStyle = {
   paddingHorizontal: spacing[4],
   backgroundColor: color.palette.deepPurple,
   marginBottom: spacing[4],
+  display: "flex",
 }
 
-export const PresidentsScreen: FC<StackScreenProps<NavigatorParamList, "presidents">> = observer(
+export const ScorePickerScreen: FC<StackScreenProps<NavigatorParamList, "scorePicker">> = observer(
   ({ navigation }) => {
-    const { playerStore } = useStores()
+    const { playerStore, OngoingGame } = useStores()
+    const { players } = playerStore
 
-    const goBack = () => {
-      navigation.goBack()
-      playerStore.deleteAllPlayers()
+    const goBack = () => navigation.goBack()
+
+    let scoreAmount = OngoingGame.numberOfPlayers
+
+    let numberOfClicks = 1
+    playerStore.getPlayers().map((player) => {
+      return {
+        playerId: player.id,
+        playerName: player.name,
+        playerScore: player.score,
+        clicked: false,
+      }
+    })
+    const button : HTMLInputElement
+
+    const saveScores = () => {
+      playerStore.savePlayers(
+        buttonProps.map((buttonProp) => {
+          return {
+            id: buttonProp.playerId,
+            name: buttonProp.playerName,
+            score: buttonProp.playerScore,
+          }
+        }),
+      )
     }
 
     return (
-      <View testID="presidents" style={FULL}>
+      <View testID="scorePicker" style={FULL}>
         <GradientBackground colors={["#422443", "#281b34"]} />
         <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
           <Header
@@ -76,20 +101,26 @@ export const PresidentsScreen: FC<StackScreenProps<NavigatorParamList, "presiden
             onLeftPress={goBack}
           />
           <div>
-            <Button
-              style={MENU_BUTTON}
-              textStyle={MENU_TEXT}
-              onPress={() => navigation.navigate("scorePicker")}
-              text="End round"
-            />
-            <Button
-              style={MENU_BUTTON}
-              textStyle={MENU_TEXT}
-              onPress={() => {
-                navigation.navigate("scoreTable")
-              }}
-              text="Show score"
-            />
+            {buttonProps.map((buttonProp) => {
+              return (
+                <Button
+                  key={buttonProp.playerId}
+                  style={MENU_BUTTON}
+                  textStyle={MENU_TEXT}
+                  text={buttonProp.playerName}
+                  disabled={buttonProp.clicked}
+                  onPress={() => {
+                    buttonProp.playerScore += scoreAmount
+                    scoreAmount--
+                    if (numberOfClicks === players.length) {
+                      saveScores()
+                      navigation.goBack()
+                    }
+                    numberOfClicks++
+                  }}
+                />
+              )
+            })}
           </div>
         </Screen>
       </View>

@@ -8,7 +8,16 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { DemoScreen, DemoListScreen, MenuScreen, NumberOfPlayersScreen, PresidentsScreen, NameOfPlayersScreen, ScoreTableScreen } from "../screens"
+import {
+  DemoScreen,
+  DemoListScreen,
+  MenuScreen,
+  NumberOfPlayersScreen,
+  PresidentsScreen,
+  NameOfPlayersScreen,
+  ScoreTableScreen,
+  ScorePickerScreen,
+} from "../screens"
 import { navigationRef } from "./navigation-utilities"
 
 /**
@@ -31,6 +40,7 @@ export type NavigatorParamList = {
   demo: undefined
   demoList: undefined
   scoreTable: undefined
+  scorePicker: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/
@@ -51,6 +61,7 @@ const AppStack = () => {
       <Stack.Screen name="scoreTable" component={ScoreTableScreen} />
       <Stack.Screen name="demo" component={DemoScreen} />
       <Stack.Screen name="demoList" component={DemoListScreen} />
+      <Stack.Screen name="scorePicker" component={ScorePickerScreen} />
     </Stack.Navigator>
   )
 }
