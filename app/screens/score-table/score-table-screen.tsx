@@ -77,7 +77,7 @@ const LIST_CONTAINER: ViewStyle = {
 
 export const ScoreTableScreen: FC<StackScreenProps<NavigatorParamList, "scoreTable">> = observer(
   ({ navigation }) => {
-    const { OngoingGame, playerStore } = useStores()
+    const { playerStore } = useStores()
     const { players } = playerStore
 
     const goBack = () => navigation.goBack()

@@ -86,7 +86,7 @@ export const MenuScreen: FC<StackScreenProps<NavigatorParamList, "menu">> = obse
               textStyle={MENU_TEXT}
               tx={getName(game.name)}
               onPress={() => {
-                ongoingGameStore.setGameName(game.name)
+                ongoingGameStore.setGame(game.name)
                 navigation.navigate("numberOfPlayers")
               }}
             />

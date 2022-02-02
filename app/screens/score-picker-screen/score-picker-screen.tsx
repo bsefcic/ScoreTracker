@@ -58,15 +58,12 @@ const MENU_BUTTON: ViewStyle = {
 
 export const ScorePickerScreen: FC<StackScreenProps<NavigatorParamList, "scorePicker">> = observer(
   ({ navigation }) => {
-    const { ongoingGameStore, roundStore } = useStores()
-    const { roundPlayers } = roundStore
-
+    const { roundStore, playerStore } = useStores()
+    const { players } = playerStore
     const goBack = () => {
+      roundStore.clearRankings()
       navigation.goBack()
-      roundStore.emptyPlayers()
     }
-
-    let scoreAmount = ongoingGameStore.numberOfPlayers
 
     return (
       <View testID="scorePicker" style={FULL}>
@@ -80,28 +77,32 @@ export const ScorePickerScreen: FC<StackScreenProps<NavigatorParamList, "scorePi
             onLeftPress={goBack}
           />
           <div>
-            {roundPlayers.map((roundPlayer) => {
+            {players.map((roundPlayer) => {
               return (
                 <Button
                   key={roundPlayer.id}
                   style={MENU_BUTTON}
                   textStyle={MENU_TEXT}
                   text={roundPlayer.name}
-                  disabled={roundPlayer.scoreWon !== Number.EPSILON}
+                  disabled={roundStore.rankings.includes(roundPlayer)}
                   onPress={() => {
-                    roundStore.setScoreWonToPlayer(roundPlayer.id, scoreAmount)
-                    if (scoreAmount === ongoingGameStore.numberOfPlayers)
-                      roundStore.setWinner(roundPlayer)
-                    if (scoreAmount === 1) roundStore.setLoser(roundPlayer)
-                    scoreAmount--
-                    if (roundStore.allPLayersPicked()) {
-                      roundStore.emptyPlayers()
-                      navigation.goBack()
-                    }
+                    roundStore.addPlayer(roundPlayer.id)
                   }}
                 />
               )
             })}
+            <Button
+              key="finish-button"
+              style={MENU_BUTTON}
+              textStyle={MENU_TEXT}
+              text="FINISH"
+              disabled={roundStore.rankings.length !== players.length}
+              onPress={() => {
+                playerStore.calculateScores(roundStore.rankings)
+                roundStore.clearRankings()
+                navigation.goBack()
+              }}
+            />
           </div>
         </Screen>
       </View>

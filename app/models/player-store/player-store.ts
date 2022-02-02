@@ -1,6 +1,6 @@
 import { types } from "mobx-state-tree"
 import { withEnvironment } from ".."
-import { PlayerModel, PlayerSnapshot } from "../player/player"
+import { Player, PlayerModel, PlayerSnapshot } from "../player/player"
 
 export const PlayerStoreModel = types
   .model("PlayerStore")
@@ -9,17 +9,11 @@ export const PlayerStoreModel = types
   })
   .extend(withEnvironment)
   .actions((self) => ({
-    savePlayers: (playerSnapshots: PlayerSnapshot[]) => {
+    savePlayers: (playerSnapshots: Player[]) => {
       self.players.replace(playerSnapshots)
     },
     addPlayer: (playerSnapshot: PlayerSnapshot) => {
-      const playerToReplace = self.players.find((player) => player.id === playerSnapshot.id)
-      if (playerToReplace) self.players.remove(playerToReplace)
       self.players.push(playerSnapshot)
-      console.log("Adding player " + playerSnapshot)
-    },
-    deleteAllPlayers: () => {
-      self.players.splice(0, self.players.length)
     },
     getNextIndex: () => {
       if (self.players.length === 0) return 1
@@ -27,5 +21,13 @@ export const PlayerStoreModel = types
     },
     getPlayers: () => {
       return self.players
+    },
+    calculateScores: (rankings: Player[]) => {
+      rankings.forEach((ranking, i) => {
+        self.players.find((p) => p.id === ranking.id).score += self.players.length - i
+      })
+    },
+    clearPlayers: () => {
+      self.players.clear()
     },
   }))

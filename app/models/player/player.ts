@@ -7,6 +7,11 @@ export const PlayerModel = types
     name: types.maybe(types.string),
     score: types.maybe(types.number),
   })
+  .actions((self) => ({
+    addScore(amount: number) {
+      self.score += amount
+    },
+  }))
 
 type PlayerType = Instance<typeof PlayerModel>
 export interface Player extends PlayerType {}

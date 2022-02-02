@@ -124,7 +124,7 @@ export const NameOfPlayersScreen: FC<
                 score: 0,
               })
             }
-            navigation.navigate(getScreenName(ongoingGameStore.name))
+            navigation.navigate(getScreenName(ongoingGameStore.game.name))
           }}
         />
       </Screen>

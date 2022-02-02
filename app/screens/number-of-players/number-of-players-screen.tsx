@@ -59,10 +59,9 @@ export const NumberOfPlayersScreen: FC<
   StackScreenProps<NavigatorParamList, "numberOfPlayers">
 > = observer(({ navigation }) => {
   const goBack = () => navigation.goBack()
-  const { gameStore, ongoingGameStore } = useStores()
-  const { games } = gameStore
+  const { ongoingGameStore } = useStores()
 
-  const game = games.find((game) => game.name === ongoingGameStore.name)
+  const game = ongoingGameStore.game
 
   const numberOptions = Array.from(
     { length: game.maxNumberOfPlayers - game.minNumberOfPlayers + 1 },

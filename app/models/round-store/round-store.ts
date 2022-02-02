@@ -1,48 +1,20 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { withEnvironment } from ".."
-import { PlayerSnapshot } from "../player/player"
-import { RoundPlayerModel, RoundPlayerSnapshot } from "../round-player/round-player"
+import { PlayerModel } from "../player/player"
 
 export const RoundStoreModel = types
   .model("Round")
   .props({
-    roundPlayers: types.optional(types.array(RoundPlayerModel), []),
-    winner: types.maybe(types.reference(RoundPlayerModel)),
-    loser: types.maybe(types.reference(RoundPlayerModel)),
+    rankings: types.array(types.reference(PlayerModel)),
   })
   .extend(withEnvironment)
   .actions((self) => ({
-    setRoundPLayers: (roundPlayers: RoundPlayerSnapshot[]) => {
-      self.roundPlayers.replace(roundPlayers)
+    addPlayer(playerId: number) {
+      self.rankings.push(playerId)
     },
-    getRoundPlayers: () => {
-      return self.roundPlayers
-    },
-    setWinner: (player: RoundPlayerSnapshot) => {
-      self.winner = player
-    },
-    setLoser: (player: RoundPlayerSnapshot) => {
-      self.loser = player
-    },
-    setScoreWonToPlayer: (playerId: number, amount: number) => {
-      self.roundPlayers.forEach(
-        (roundPlayer) => roundPlayer.id === playerId && (roundPlayer.scoreWon = amount),
-      )
-    },
-    setGamePlayers: (gamePlayers: PlayerSnapshot[]) => {
-      gamePlayers.forEach((gamePlayer) => {
-        self.roundPlayers.push({
-          id: gamePlayer.id,
-          name: gamePlayer.name,
-        })
-      })
-    },
-    emptyPlayers: () => {
-      self.roundPlayers.splice(0, self.roundPlayers.length)
-    },
-    allPLayersPicked: () => {
-      return self.winner !== undefined && self.loser !== undefined
-    },
+    clearRankings() {
+      self.rankings.clear()
+    }
   }))
 
 type RoundType = Instance<typeof RoundStoreModel>

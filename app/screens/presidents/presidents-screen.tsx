@@ -2,7 +2,7 @@ import React, { FC } from "react"
 import { View, ViewStyle, TextStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
-import { Button, Header, Screen, Text, GradientBackground } from "../../components"
+import { Button, Header, Screen, GradientBackground } from "../../components"
 import { color, spacing, typography } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
 import { useStores } from "../../models"
@@ -30,18 +30,6 @@ const HEADER_TITLE: TextStyle = {
   textAlign: "center",
   letterSpacing: 1.5,
 }
-const TITLE_WRAPPER: TextStyle = {
-  ...TEXT,
-  textAlign: "center",
-  paddingBottom: spacing[7],
-}
-const TITLE: TextStyle = {
-  ...TEXT,
-  ...BOLD,
-  fontSize: 28,
-  lineHeight: 38,
-  textAlign: "center",
-}
 const MENU_TEXT: TextStyle = {
   ...TEXT,
   ...BOLD,
@@ -57,11 +45,10 @@ const MENU_BUTTON: ViewStyle = {
 
 export const PresidentsScreen: FC<StackScreenProps<NavigatorParamList, "presidents">> = observer(
   ({ navigation }) => {
-    const { playerStore, roundStore } = useStores()
-
+    const { playerStore } = useStores()
     const goBack = () => {
+      playerStore.clearPlayers()
       navigation.goBack()
-      playerStore.deleteAllPlayers()
     }
 
     return (
@@ -80,7 +67,6 @@ export const PresidentsScreen: FC<StackScreenProps<NavigatorParamList, "presiden
               style={MENU_BUTTON}
               textStyle={MENU_TEXT}
               onPress={() => {
-                roundStore.setGamePlayers(playerStore.getPlayers())
                 navigation.navigate("scorePicker")
               }}
               text="End round"
