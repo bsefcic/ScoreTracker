@@ -1,6 +1,6 @@
 import { types } from "mobx-state-tree"
 import { withEnvironment } from ".."
-import { GameModel } from "../Game/Game"
+import { GameModel } from "../game/game"
 
 export const GameStoreModel = types
   .model("GameStore")
