@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-scoretracker-dev-174640-authRole",
+      "UnauthRoleArn": "arn:aws:iam::558384473796:role/amplify-scoretracker-dev-174640-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::558384473796:role/amplify-scoretracker-dev-174640-authRole",
+      "Region": "us-west-1",
+      "DeploymentBucketName": "amplify-scoretracker-dev-174640-deployment",
+      "UnauthRoleName": "amplify-scoretracker-dev-174640-unauthRole",
+      "StackName": "amplify-scoretracker-dev-174640",
+      "StackId": "arn:aws:cloudformation:us-west-1:558384473796:stack/amplify-scoretracker-dev-174640/60fa37f0-ba6f-11ec-b870-069f83950e61",
+      "AmplifyAppId": "d292bwlqttmw5i"
+    },
+    "categories": {
+      "auth": {
+        "scoretracker9254edc6": {}
+      }
+    }
+  }
+}

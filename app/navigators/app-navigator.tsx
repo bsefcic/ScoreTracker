@@ -41,6 +41,7 @@ export type NavigatorParamList = {
   demoList: undefined
   scoreTable: undefined
   scorePicker: undefined
+  login: undefined
 }
 
 // Documentation: https://reactnavigation.org/docs/stack-navigator/

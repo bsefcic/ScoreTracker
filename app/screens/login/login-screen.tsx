@@ -65,13 +65,13 @@ const getName = (gameName: string): TxKeyPath => {
   }
 }
 
-export const MenuScreen: FC<StackScreenProps<NavigatorParamList, "menu">> = observer(
+export const LoginScreen: FC<StackScreenProps<NavigatorParamList, "menu">> = observer(
   ({ navigation }) => {
     const { gameStore, ongoingGameStore } = useStores()
     const { games } = gameStore
 
     return (
-      <View testID="MenuScreen" style={FULL}>
+      <View testID="LoginScreen" style={FULL}>
         <GradientBackground colors={["#422443", "#281b34"]} />
         <Screen style={CONTAINER} preset="scroll" backgroundColor={color.transparent}>
           <Header headerTx="welcomeScreen.poweredBy" style={HEADER} titleStyle={HEADER_TITLE} />
